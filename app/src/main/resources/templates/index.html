@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Managment System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container my-2">
+        <h1>Employee List</h1>
+            <a th:href="@{/ShowNewEmployeeForm}" class="btn btn-primary btn-sm mb-3"> Add Employee</a>
+        <table border="1" class="table table-striped table-responsive-md">
+            <thead>
+                <tr>
+                    <th><a th:href="@{'/page/' + ${currentPage} +'?sortField=firstname&sortDir='+${reverse}}">Employee First Name</a></th>
+                    <th><a th:href="@{'/page/' + ${currentPage} +'?sortField=lastname&sortDir='+${reverse}}">Employee Last Name</a></th>
+                    <th><a th:href="@{'/page/' + ${currentPage} +'?sortField=email&sortDir='+${reverse}}">Employee Email</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="emp : ${listEmp}">
+                    <td th:text="${emp.firstname}"></td>
+                    <td th:text="${emp.lastname}"></td>
+                    <td th:text="${emp.email}"></td>
+                    <td>
+                        <a th:href="@{/ShowFormForUpdate/{id}(id=${emp.id})}" class = "btn btn-primary">Update</a>
+                        <a th:href="@{/deleteEmp/{id}(id=${emp.id})}" class = "btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div th:if="${totalPage>1}">
+            <div class="row col-sm-10">
+                <div class = "col-sm-2">
+                    Total Rows: [[${totalItem}]]
+                </div>
+                <div class = "col-sm-1">
+                    <span th:each="i: ${#numbers.sequence(1, totalPage)}">
+                        <a th:if="${currentPage!=i}" th:href="@{'/page/' + ${i}+'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+                        <span th:unless="${currentPage !=i}">[[${i}]]</span> &nbsp; &nbsp;
+                    </span>
+                </div>
+                <div class = "col-sm-1">
+                    <a th:if="${currentPage<totalPage}" th:href="@{'/page/'+${currentPage+1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
+                    <span th:unless="${currentPage<totalPage}">Next</span>
+                </div>
+                <div class = "col-sm-1">
+                    <a th:if="${currentPage>1}" th:href="@{'/page/'+${currentPage-1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
+                    <span th:unless="${currentPage>1}">Last </span>
+                </div>
+ 
+            </div>
+        </div>
+    </div>
+</body>
+</html>
